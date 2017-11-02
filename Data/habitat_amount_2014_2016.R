@@ -35,27 +35,27 @@ load("Data/habitat_amount_2014_2016.RData")
 ################################################################
 ################################################################
 
-plotsummary=read.csv("C:\\Research\\Cactus bugs\\EAGER\\Analysis\\plot_trt_summary.csv",head=T)
-surveys=read.csv("C:\\Research\\Cactus bugs\\EAGER\\Analysis\\survey_dates_2014_2016.csv",head=T) 
-community=read.csv("C:/Research/Cactus bugs/EAGER/Analysis/community/Community_2014_2016.csv",head=T) 
-patch.coordinates.2015<-read.csv("C:/Research/Cactus bugs/EAGER/Analysis/cactus/cactus_quality.csv",head=T) 
-patch.coordinates.2014<-read.csv("C:/Research/Cactus bugs/EAGER/Analysis/patch_2014.csv",header=T)
+#plotsummary=read.csv("C:\\Research\\Cactus bugs\\EAGER\\Analysis\\plot_trt_summary.csv",head=T)
+#surveys=read.csv("C:\\Research\\Cactus bugs\\EAGER\\Analysis\\survey_dates_2014_2016.csv",head=T) 
+#community=read.csv("C:/Research/Cactus bugs/EAGER/Analysis/community/Community_2014_2016.csv",head=T) 
+#patch.coordinates.2015<-read.csv("C:/Research/Cactus bugs/EAGER/Analysis/cactus/cactus_quality.csv",head=T) 
+#patch.coordinates.2014<-read.csv("C:/Research/Cactus bugs/EAGER/Analysis/patch_2014.csv",header=T)
 
-patch.coordinates.2015$posttrt<-"Y"
-coordinates<-merge(patch.coordinates.2014, patch.coordinates.2015, by.x=c("plot","patch"),by.y=c("Plot","Patch"), all=T)
+#patch.coordinates.2015$posttrt<-"Y"
+#coordinates<-merge(patch.coordinates.2014, patch.coordinates.2015, by.x=c("plot","patch"),by.y=c("Plot","Patch"), all=T)
 
-surveys<-subset(surveys, select=c("Plot", "Survey.Date","SurveyNumber"))
-community<-merge(community,plotsummary, by="Plot",all=TRUE)
-community<-merge(community,surveys, by=c("Plot","Survey.Date"), all=FALSE)
+#surveys<-subset(surveys, select=c("Plot", "Survey.Date","SurveyNumber"))
+#community<-merge(community,plotsummary, by="Plot",all=TRUE)
+#community<-merge(community,surveys, by=c("Plot","Survey.Date"), all=FALSE)
 
 #format date
-community$date<-as.POSIXct(strptime(community$Survey.Date, "%m/%d/%Y"))
-community$year<-format(community$date,'%Y')
-community$day<-format(community$date,'%d')
+#community$date<-as.POSIXct(strptime(community$Survey.Date, "%m/%d/%Y"))
+#community$year<-format(community$date,'%Y')
+#community$day<-format(community$date,'%d')
 
 #two plots (1,12) in 2014 not surveyed in 2015: remove those
-community$Plot<-factor(community$Plot)
-community<-community[! community$Plot %in% c('1', '12'), ]
+#community$Plot<-factor(community$Plot)
+#community<-community[! community$Plot %in% c('1', '12'), ]
 
 
 ################################################################
