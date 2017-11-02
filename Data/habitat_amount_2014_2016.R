@@ -5,7 +5,7 @@
 #the configuration/isolation within this area doesn't matter
 ###########################################################
 
-########
+
 #calculate: 
 #1) patch size
 #2) buffer area (with and without patch size)
