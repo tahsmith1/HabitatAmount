@@ -5,7 +5,7 @@
 #the configuration/isolation within this area doesn't matter
 ###########################################################
 
-
+#######
 #calculate: 
 #1) patch size
 #2) buffer area (with and without patch size)
@@ -27,8 +27,7 @@ library(lme4)
 library(glmmADMB)#zero-inflated mixed model
 
 #working directory
-setwd('C:\\Research\\Cactus bugs\\EAGER\\Analysis\\Habitat amount test\\')  
-load("C:/Research/Cactus bugs/EAGER/Analysis/Habitat amount test/habitat_amount_2014_2016.RData")
+load("Data/habitat_amount_2014_2016.RData")
 
 ################################################################
 ################################################################
