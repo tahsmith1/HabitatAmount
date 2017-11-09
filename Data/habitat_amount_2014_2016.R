@@ -283,7 +283,7 @@ summary(zip.CheliAdN.tbufferarea)
 summary(zip.CheliAdN.patchsizeXTypeXLoss)
 
 
-save.image("C:/Research/Cactus bugs/EAGER/Analysis/Habitat amount test/habitat_amount_2014_2016.RData")
+#save.image("C:/Research/Cactus bugs/EAGER/Analysis/Habitat amount test/habitat_amount_2014_2016.RData")
 
 #########################################################################
 #########################################################################
