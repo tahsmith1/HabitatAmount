@@ -147,11 +147,13 @@ ifm2015=list()
 bufferarea2015=list()
 nnd2015=list()
 pc2015=list()
+bufferfararea2015=list()
 
 ifm2014=list()
 bufferarea2014=list()
 nnd2014=list()
 pc2014=list()
+bufferfararea2014=list()
 
 #2015
 library(igraph)
@@ -209,6 +211,45 @@ for(i in 2:17){
   bufferarea2014[[i]]<-rowSums(sweep(dist.alpha, 2, area.i, "*"))  
 }
 
+
+###Calculate the buffer area based on the far edges of patches (most conservative way to calculate)
+##2015
+for(i in 1:17){  
+  #if (i==12) next
+  
+  #area/dist
+  
+  dist.i<-distfaredge.matrix.2015[[i]]
+  area.i<-area.2015[[i]]
+  
+  #distance metrics
+  dist.inv<-1/dist.i
+  diag(dist.inv)<-0
+  
+  #buffer area
+  dist.alpha<-ifelse(dist.i>meandist,0,1)#movement dist
+  diag(dist.alpha)<-0 #doesn't include focal patch
+  bufferfararea2015[[i]]<-rowSums(sweep(dist.alpha, 2, area.i, "*"))  
+}
+
+##2014
+for(i in 1:17){  
+  #if (i==12) next
+  
+  #area/dist
+  
+  dist.i<-distfaredge.matrix.2014[[i]]
+  area.i<-area.2014[[i]]
+  
+  #distance metrics
+  dist.inv<-1/dist.i
+  diag(dist.inv)<-0
+  
+  #buffer area
+  dist.alpha<-ifelse(dist.i>meandist,0,1)#movement dist
+  diag(dist.alpha)<-0 #doesn't include focal patch
+  bufferfararea2014[[i]]<-rowSums(sweep(dist.alpha, 2, area.i, "*"))  
+}
 
 #get total population size in bufferarea
 bufferN=vector(length=nrow(community))
