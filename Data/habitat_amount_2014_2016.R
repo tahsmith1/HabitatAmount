@@ -75,6 +75,7 @@ coordinates$AreaMean2<-ifelse(is.na(coordinates$AreaMean2),coordinates$AreaMean,
 #make lists for each plot for distance/area
 dist.matrix.2015=list()#from patch centers
 distedge.matrix.2015=list()#from patch edges (approximate)
+distfaredge.matrix.2015=list() #center to patch far edge distance matrix
 area.2015=list()
 xy.2015=list()
 plotID.2015=list()
@@ -97,10 +98,15 @@ for(i in 1:17){
   radius.i<-(plot.i$AreaMean/pi)^0.5
   distedge.matrix.2015[[i]]<-dist.matrix.2015[[i]]-outer(radius.i,radius.i,"+")
   xy.2015[[i]]<-cbind(plot.i$East,plot.i$North)
+  
+  #Distance matrices to far edge
+  distfaredge.matrix.2015[[i]] <- sweep(dist.matrix.2015[[i]], 2, radius.i, "+")
+  diag(distfaredge.matrix.2015[[i]])<-0 #doesn't include focal patch
 }
 
 #2014
 dist.matrix.2014=list()
+distfaredge.matrix.2014=list() #center to patch far edge distance matrix
 area.2014=list()
 xy.2014=list()
 plotID.2014=list()
@@ -118,6 +124,11 @@ for(i in 2:17){
   dist.matrix.2014[[i]]<-as.matrix(dist(cbind(plot.i$East,plot.i$North))) #Euclidean distance matrix
   area.2014[[i]]<-plot.i$AreaMean2
   xy.2014[[i]]<-cbind(plot.i$East,plot.i$North)
+
+  #Distance matrices to far edge
+  radius.i<-(plot.i$AreaMean/pi)^0.5
+  distfaredge.matrix.2014[[i]] <- sweep(dist.matrix.2014[[i]], 2, radius.i, "+")
+  diag(distfaredge.matrix.2014[[i]])<-0 #doesn't include focal patch
 }
 
 
@@ -197,6 +208,7 @@ for(i in 2:17){
   diag(dist.alpha)<-0 #doesn't include focal patch
   bufferarea2014[[i]]<-rowSums(sweep(dist.alpha, 2, area.i, "*"))  
 }
+
 
 #get total population size in bufferarea
 bufferN=vector(length=nrow(community))
