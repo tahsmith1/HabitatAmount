@@ -263,12 +263,14 @@ lapply(nnd2015,mean,na.rm=T)
 landscape2015.df<-data.frame(Plot=unlist(plotID.2015),Patch=unlist(patchID.2015),
                              patcharea=unlist(area.2015),
                              nnd=unlist(nnd2015), 
-                             bufferarea=unlist(bufferarea2015), 
+                             bufferarea=unlist(bufferarea2015),
+                             bufferfararea=unlist(bufferfararea2015),
                              ifm=unlist(ifm2015))
 landscape2014.df<-data.frame(Plot=unlist(plotID.2014),Patch=unlist(patchID.2014),
                              patcharea=unlist(area.2014),
                              nnd=unlist(nnd2014), 
                              bufferarea=unlist(bufferarea2014), 
+                             bufferfararea=unlist(bufferfararea2014),
                              ifm=unlist(ifm2014))
 landscape.df<-rbind(landscape2015.df, landscape2014.df)
 
@@ -276,10 +278,15 @@ head(community,1)
 head(landscape.df,1)
 
 community<-merge(community, landscape.df, by=c("Plot","Patch"), all=F)
+names(community)[names(community) == "patcharea.x"] <- "patcharea"
+names(community)[names(community) == "nnd.x"] <- "nnd"
+names(community)[names(community) == "bufferarea.x"] <- "bufferarea"
+names(community)[names(community) == "ifm.x"] <- "ifm"
 head(community,1)
 
 #combine patch size with surrounding bufferarea for total area
-community$tbufferarea<-community$patch + community$bufferarea
+#community$tbufferarea<-community$patch + community$bufferarea
+community$tbufferfararea<-community$patcharea + community$bufferfararea
 
 ################################################################
 ################################################################
@@ -298,6 +305,11 @@ zipm.CheliAdN.patchsize<-glmmadmb(Cheli.adults~scale(patcharea)+(1|Plot), data=c
 zipm.CheliAdN.bufferarea<-glmmadmb(Cheli.adults~scale(bufferarea)+(1|Plot), data=community2015.nocont, family="Poisson", zeroInflation=T)
 zipm.CheliAdN.tbufferarea<-glmmadmb(Cheli.adults~scale(tbufferarea)+(1|Plot), data=community2015.nocont, family="Poisson", zeroInflation=T)
 zipm.CheliAdN.TypeXLoss<-glmmadmb(Cheli.adults~TrtType*PropLost+(1|Plot), data=community2015.nocont, family="Poisson", zeroInflation=T)
+
+
+zipm.CheliAdN.bufferfararea<-glmmadmb(Cheli.adults~scale(bufferfararea)+(1|Plot), data=community2015.nocont, family="Poisson", zeroInflation=T)
+zipm.CheliAdN.tbufferfararea<-glmmadmb(Cheli.adults~scale(tbufferfararea)+(1|Plot), data=community2015.nocont, family="Poisson", zeroInflation=T)
+
 
 zipm.CheliAdN.patchsizeXbufferarea<-glmmadmb(Cheli.adults~scale(patcharea)*scale(bufferarea)+(1|Plot), data=community2015.nocont, family="Poisson", zeroInflation=T)
 zipm.CheliAdN.patchsizeXType<-glmmadmb(Cheli.adults~scale(patcharea)*TrtType+(1|Plot), data=community2015.nocont, family="Poisson", zeroInflation=T)
