@@ -340,9 +340,13 @@ zip.CheliAdN.tbufferarea<-zeroinfl(Cheli.adults ~ tbufferarea | 1, data = commun
 zip.CheliAdN.patchsizeXTypeXLoss<-zeroinfl(Cheli.adults ~ scale(patcharea)*TrtType*PropLost| 1, data = community2015.nocont)
 zip.CheliAdN.patchsizeTypeLoss<-zeroinfl(Cheli.adults ~ patcharea+TrtType+PropLost| 1, data = community2015.nocont)
 
-AIC(zip.CheliAdN.patchsize,zip.CheliAdN.bufferarea,zip.CheliAdN.tbufferarea)
+zip.CheliAdN.bufferfararea<-zeroinfl(Cheli.adults ~ bufferfararea | 1, data = community2015.nocont)
+zip.CheliAdN.tbufferfararea<-zeroinfl(Cheli.adults ~ tbufferfararea | 1, data = community2015.nocont)
+
+AIC(zip.CheliAdN.patchsize,zip.CheliAdN.bufferarea,zip.CheliAdN.tbufferarea, zip.CheliAdN.tbufferfararea, zip.CheliAdN.bufferfararea)
 summary(zip.CheliAdN.patchsize)
 summary(zip.CheliAdN.tbufferarea)
+summary(zip.CheliAdN.tbufferfararea)
 
 
 summary(zip.CheliAdN.patchsizeXTypeXLoss)
