@@ -126,7 +126,7 @@ for(i in 2:17){
   xy.2014[[i]]<-cbind(plot.i$East,plot.i$North)
 
   #Distance matrices to far edge
-  radius.i<-(plot.i$AreaMean/pi)^0.5
+  radius.i<-(plot.i$AreaMean2/pi)^0.5
   distfaredge.matrix.2014[[i]] <- sweep(dist.matrix.2014[[i]], 2, radius.i, "+")
   diag(distfaredge.matrix.2014[[i]])<-0 #doesn't include focal patch
 }
