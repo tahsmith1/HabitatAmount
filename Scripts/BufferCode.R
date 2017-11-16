@@ -49,3 +49,24 @@ for(i in 1:17){
 
 
 
+##2014
+for(i in 1:17){  
+  #if (i==12) next
+  
+  #area/dist
+  
+  dist.2 <-distfaredge.matrix.2014[[12]]
+  area.2<-area.2014[[12]]
+  
+  #distance metrics
+  dist.inv2<-1/dist.2
+  diag(dist.inv2)<-0
+  
+  #buffer area
+  dist.alpha2<-ifelse(dist.2>meandist,0,1)#movement dist
+  diag(dist.alpha2)<-0 #doesn't include focal patch
+  bufferfararea2014.2<-rowSums(sweep(dist.alpha2, 2, area.2, "*"))  
+}
+
+
+

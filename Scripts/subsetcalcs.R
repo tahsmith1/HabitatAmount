@@ -63,3 +63,6 @@ summary(zip.CheliAdN.bufferarea2)
 
 summary(zip.CheliAdN.tbufferarea)
 summary(zip.CheliAdN.tbufferarea2)
+
+
+#####################################

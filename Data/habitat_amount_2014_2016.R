@@ -147,13 +147,13 @@ ifm2015=list()
 bufferarea2015=list()
 nnd2015=list()
 pc2015=list()
-bufferfararea2015=list()
+
 
 ifm2014=list()
 bufferarea2014=list()
 nnd2014=list()
 pc2014=list()
-bufferfararea2014=list()
+
 
 #2015
 library(igraph)
@@ -214,6 +214,7 @@ for(i in 2:17){
 
 ###Calculate the buffer area based on the far edges of patches (most conservative way to calculate)
 ##2015
+bufferfararea2015=list()
 for(i in 2:17){  
   if (i==12) next
   
@@ -232,6 +233,7 @@ for(i in 2:17){
   bufferfararea2015[[i]]<-rowSums(sweep(dist.alpha, 2, area.i, "*"))  
 }
 
+bufferfararea2014=list()
 ##2014
 for(i in 2:17){  
   if (i==12) next
