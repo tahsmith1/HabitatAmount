@@ -282,7 +282,7 @@ names(community)[names(community) == "patcharea.x"] <- "patcharea"
 names(community)[names(community) == "nnd.x"] <- "nnd"
 names(community)[names(community) == "bufferarea.x"] <- "bufferarea"
 names(community)[names(community) == "ifm.x"] <- "ifm"
-head(community,1)
+head(community,5)
 
 #combine patch size with surrounding bufferarea for total area
 #community$tbufferarea<-community$patch + community$bufferarea
@@ -345,6 +345,7 @@ zip.CheliAdN.tbufferfararea<-zeroinfl(Cheli.adults ~ tbufferfararea | 1, data = 
 
 AIC(zip.CheliAdN.patchsize,zip.CheliAdN.bufferarea,zip.CheliAdN.tbufferarea, zip.CheliAdN.tbufferfararea, zip.CheliAdN.bufferfararea)
 summary(zip.CheliAdN.patchsize)
+summary(zip.CheliAdN.bufferarea)
 summary(zip.CheliAdN.tbufferarea)
 summary(zip.CheliAdN.tbufferfararea)
 
