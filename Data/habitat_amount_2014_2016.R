@@ -214,8 +214,8 @@ for(i in 2:17){
 
 ###Calculate the buffer area based on the far edges of patches (most conservative way to calculate)
 ##2015
-for(i in 1:17){  
-  #if (i==12) next
+for(i in 2:17){  
+  if (i==12) next
   
   #area/dist
   
@@ -233,8 +233,8 @@ for(i in 1:17){
 }
 
 ##2014
-for(i in 1:17){  
-  #if (i==12) next
+for(i in 2:17){  
+  if (i==12) next
   
   #area/dist
   
