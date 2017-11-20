@@ -340,7 +340,13 @@ zip.CheliAdN.patchsize<-zeroinfl(Cheli.adults ~ patcharea | 1, data = community2
 zip.CheliAdN.bufferarea<-zeroinfl(Cheli.adults ~ bufferarea | 1, data = community2015.nocont)
 zip.CheliAdN.tbufferarea<-zeroinfl(Cheli.adults ~ tbufferarea | 1, data = community2015.nocont)
 zip.CheliAdN.patchsizeXTypeXLoss<-zeroinfl(Cheli.adults ~ scale(patcharea)*TrtType*PropLost| 1, data = community2015.nocont)
-zip.CheliAdN.patchsizeTypeLoss<-zeroinfl(Cheli.adults ~ patcharea+TrtType+PropLost| 1, data = community2015.nocont)
+zip.CheliAdN.patchsizeXTypeXLossXbuffer<-zeroinfl(Cheli.adults ~ scale(patcharea)*bufferarea*TrtType*PropLost| 1, data = community2015.nocont)
+
+zipm.CheliAdN.nndXtbufferarea<-glmmadmb(Cheli.adults~scale(tbufferarea)*scale(nnd)+(1|Plot), data=community2015.nocont, family="Poisson", zeroInflation=T)
+
+
+zip.CheliAdN.bufferXndd<-zeroinfl(Cheli.adults ~ tbufferarea*nnd | 1, data = community2015.nocont)
+zip.CheliAdN.bufferXpatcharea<-zeroinfl(Cheli.adults ~ bufferarea*patcharea | 1, data = community2015.nocont)
 
 zip.CheliAdN.bufferfararea<-zeroinfl(Cheli.adults ~ bufferfararea | 1, data = community2015.nocont)
 zip.CheliAdN.tbufferfararea<-zeroinfl(Cheli.adults ~ tbufferfararea | 1, data = community2015.nocont)
@@ -352,8 +358,10 @@ summary(zip.CheliAdN.tbufferarea)
 summary(zip.CheliAdN.tbufferfararea)
 
 
-summary(zip.CheliAdN.patchsizeXTypeXLoss)
-
+summary(zip.CheliAdN.patchsizeXTypeXLossXbuffer)
+summary(zip.CheliAdN.bufferXpatcharea)
+summary(zip.CheliAdN.bufferarea)
+summary(zip.CheliAdN.patchsize)
 
 #save.image("C:/Research/Cactus bugs/EAGER/Analysis/Habitat amount test/habitat_amount_2014_2016.RData")
 
