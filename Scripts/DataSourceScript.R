@@ -150,8 +150,17 @@ communityt$tbufferfararea<-communityt$patcharea + communityt$bufferfararea
 communityt$tbufferarea<-communityt$patcharea + communityt$bufferarea
 
 community <- communityt
+
+##### Add month column
+community$Survey.Date <- as.Date(community$Survey.Date, format = "%m/%d/%Y")
+community$month <- months(community$Survey.Date)
+community$month <-factor(community$month, levels= c("January","February","March","April", "May", "June", "July", "August","September", "October", "November", "December"))
+community$month<- as.numeric(community$month)
 #####################Calculation of subeseted plot to avoid edge effects
 ####Calculations
+
+meandist=12.5 #2014 monthly data, removing first check (transient from release)
+alpha<-1/meandist
 
 pc_minmax <- read.csv("Data/plot_corners_minmax.csv")
 
@@ -177,13 +186,13 @@ for(i in 1:17){
 ################
 coordinates$coordInc <- unlist(subcoordInd)
 
-subsetmerge<- coordinates[,c(1,2,15)]
+subsetmerge<- coordinates[,c(2,3,16)]
 names(subsetmerge)[1:2] <- c("Plot","Patch")
 
-communityNew <-  merge(community,subsetmerge , by=c("Plot","Patch"), all=F)
-communitySub <- subset(communityNew, coordInc == 1)
+communityNew <-  merge(community,subsetmerge , by=c("Plot","Patch"), all = F)
+communitySub <- subset(communityNew, coordinates$coordInc == 1)
 
-#####
+
 
 ####writes already calculated community and coordinate data frames#######
 
@@ -196,4 +205,17 @@ community2015.nocont<-subset(community2015, TrtType!="cont")
 
 write.csv(community2015,"ManData/community2015.csv")
 write.csv(community2015.nocont, "ManData/community2015.nocont.csv")
+
+#################################################################################
+
+community2015$Survey.Date <- as.Date(community2015$Survey.Date, format = "%m/%d/%Y")
+
+community2015$month<- as.numeric(as.factor(months(as.Date(community2015$Survey.Date, format = "%m/%d/%Y"))))
+
+community2015$month <- months(community2015$Survey.Date)
+
+#community2015$month1<- 
+community2015$month <-factor(community2015$month, levels= c("January","Feb","March","April", "May", "June", "July", "August","September", "October", "November", "December"))
+community2015$month<- as.numeric(community2015$month)
+
 
