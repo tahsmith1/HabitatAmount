@@ -138,6 +138,9 @@ landscape2014.df<-data.frame(Plot=unlist(plotID.2014),Patch=unlist(patchID.2014)
 landscape2014.df$year <- 2014
 landscape2015.df$year <- 2015
 
+#write.csv(landscape2014.df,"ManData/landscape2014.csv")
+#write.csv(landscape2015.df,"ManData/landscape2015.csv")
+
 landscape.df<-rbind(landscape2015.df, landscape2014.df)
 
 community<- community[,c(-33,-32, -31, -30, -29)]
