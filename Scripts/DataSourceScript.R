@@ -13,6 +13,7 @@ library(glmmADMB)#zero-inflated mixed model
 
 load("Data/habitat_amount_2014_2016.RData")
 
+community<- unique(community)
 
 #make lists for each plot for distance/area
 dist.matrix.2015=list()#from patch centers
@@ -133,18 +134,22 @@ landscape2014.df<-data.frame(Plot=unlist(plotID.2014),Patch=unlist(patchID.2014)
                              bufferarea=unlist(bufferarea2014), 
                              bufferfararea=unlist(bufferfararea2014),
                              ifm=unlist(ifm2014))
+
+landscape2014.df$year <- 2014
+landscape2015.df$year <- 2015
+
 landscape.df<-rbind(landscape2015.df, landscape2014.df)
 
+community<- community[,c(-33,-32, -31, -30, -29)]
 community <- unique(community)
 
-communityt<-merge(community, landscape.df, by=c("Plot","Patch"), all=F)
-names(community)[names(community) == "patcharea.x"] <- "patcharea"
-names(community)[names(community) == "nnd.x"] <- "nnd"
-names(community)[names(community) == "bufferarea.x"] <- "bufferarea"
-names(community)[names(community) == "ifm.x"] <- "ifm"
+communityt<-merge(community, landscape.df, by=c("Plot","Patch","year"), all=F)
 
-community$tbufferfararea<-community$patcharea + community$bufferfararea
 
+communityt$tbufferfararea<-communityt$patcharea + communityt$bufferfararea
+communityt$tbufferarea<-communityt$patcharea + communityt$bufferarea
+
+community <- communityt
 #####################Calculation of subeseted plot to avoid edge effects
 ####Calculations
 
@@ -178,4 +183,17 @@ names(subsetmerge)[1:2] <- c("Plot","Patch")
 communityNew <-  merge(community,subsetmerge , by=c("Plot","Patch"), all=F)
 communitySub <- subset(communityNew, coordInc == 1)
 
+#####
+
+####writes already calculated community and coordinate data frames#######
+
+
+write.csv(community,"ManData/community.csv")
+write.csv(communitySub, "ManData/communitySub.csv")
+
+community2015<-subset(community, SurveyNumber>5 & SurveyNumber<23)
+community2015.nocont<-subset(community2015, TrtType!="cont")
+
+write.csv(community2015,"ManData/community2015.csv")
+write.csv(community2015.nocont, "ManData/community2015.nocont.csv")
 
