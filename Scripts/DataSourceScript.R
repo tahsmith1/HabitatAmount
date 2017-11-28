@@ -135,9 +135,9 @@ landscape2014.df<-data.frame(Plot=unlist(plotID.2014),Patch=unlist(patchID.2014)
                              ifm=unlist(ifm2014))
 landscape.df<-rbind(landscape2015.df, landscape2014.df)
 
+community <- unique(community)
 
-
-community<-merge(community, landscape.df, by=c("Plot","Patch"), all=F)
+communityt<-merge(community, landscape.df, by=c("Plot","Patch"), all=F)
 names(community)[names(community) == "patcharea.x"] <- "patcharea"
 names(community)[names(community) == "nnd.x"] <- "nnd"
 names(community)[names(community) == "bufferarea.x"] <- "bufferarea"
@@ -175,7 +175,7 @@ coordinates$coordInc <- unlist(subcoordInd)
 subsetmerge<- coordinates[,c(1,2,15)]
 names(subsetmerge)[1:2] <- c("Plot","Patch")
 
-communityNew <-  merge(community2015.nocont,subsetmerge , by=c("Plot","Patch"), all=F)
+communityNew <-  merge(community,subsetmerge , by=c("Plot","Patch"), all=F)
 communitySub <- subset(communityNew, coordInc == 1)
 
 

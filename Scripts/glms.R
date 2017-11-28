@@ -17,7 +17,6 @@ glm_patchareaXbufferarea <- glm(CheliBinary~bufferarea*patcharea,family = binomi
 glm_nndXbufferarea <- glm(CheliBinary~bufferarea*nnd,family = binomial(link = logit),data = community2015.nocont)
 
 
-
 summary(glm_patchareaXbufferarea)
 summary(glm_nndXbufferarea)
 
