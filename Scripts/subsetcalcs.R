@@ -7,7 +7,10 @@
 ###Subset community dataframe to include only patches in the subplot area
 ###Rerun ZIP models using this subsetted data
 
+coordinates<-  read.csv("ManData/coordinates.csv")
 pc_minmax <- read.csv("Data/plot_corners_minmax.csv")
+
+meandist=12.5 #2014 monthly data, removing first check (transient from release)
 
 pc_minmax$subXmin <- pc_minmax$Xmin + meandist
 pc_minmax$subXmax <- pc_minmax$Xmax - meandist
@@ -31,8 +34,10 @@ for(i in 1:17){
 ################
 coordinates$coordInc <- unlist(subcoordInd)
 
-subsetmerge<- coordinates[,c(1,2,15)]
+subsetmerge<- coordinates[,c(2,3,16)]
 names(subsetmerge)[1:2] <- c("Plot","Patch")
+
+#write.csv(subsetmerge,"ManData/subsetmerge.csv")
   
 communityNew <-  merge(community2015.nocont,subsetmerge , by=c("Plot","Patch"), all=F)
 communitySub <- subset(communityNew, coordInc == 1)
