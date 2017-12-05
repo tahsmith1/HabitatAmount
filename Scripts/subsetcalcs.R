@@ -39,35 +39,8 @@ names(subsetmerge)[1:2] <- c("Plot","Patch")
 
 #write.csv(subsetmerge,"ManData/subsetmerge.csv")
   
-communityNew <-  merge(community2015.nocont,subsetmerge , by=c("Plot","Patch"), all=F)
-communitySub <- subset(communityNew, coordInc == 1)
+#communityNew <-  merge(community2015.nocont,subsetmerge , by=c("Plot","Patch"), all=F)
+#communitySub <- subset(communityNew, coordInc == 1)
 
 
-######################
 
-library(pscl)
-
-zip.CheliAdN.patchsize2<-zeroinfl(Cheli.adults ~ patcharea | 1, data = communitySub)
-zip.CheliAdN.bufferarea2<-zeroinfl(Cheli.adults ~ bufferarea | 1, data = communitySub)
-zip.CheliAdN.tbufferarea2<-zeroinfl(Cheli.adults ~ tbufferarea | 1, data = communitySub)
-zip.CheliAdN.patchsizeXTypeXLoss<-zeroinfl(Cheli.adults ~ scale(patcharea)*TrtType*PropLost| 1, data = communitySub)
-zip.CheliAdN.patchsizeTypeLoss<-zeroinfl(Cheli.adults ~ patcharea+TrtType+PropLost| 1, data = communitySub)
-
-zip.CheliAdN.bufferfararea<-zeroinfl(Cheli.adults ~ bufferfararea | 1, data = communitySub)
-zip.CheliAdN.tbufferfararea<-zeroinfl(Cheli.adults ~ tbufferfararea | 1, data = communitySub)
-
-
-AIC(zip.CheliAdN.patchsize,zip.CheliAdN.bufferarea,zip.CheliAdN.tbufferarea, zip.CheliAdN.tbufferfararea, zip.CheliAdN.bufferfararea)
-
-summary(zip.CheliAdN.patchsize)
-summary(zip.CheliAdN.patchsize2)
-
-
-summary(zip.CheliAdN.bufferarea)
-summary(zip.CheliAdN.bufferarea2)
-
-summary(zip.CheliAdN.tbufferarea)
-summary(zip.CheliAdN.tbufferarea2)
-
-
-#####################################
