@@ -167,17 +167,68 @@ comm.nocont$PropLost
 AICtable <- AIC(zPatch,zBuffer,zNNDBuffer,zNND,zPropTrt)
 AICtable[order(AICtable$AIC),]
 
-
-zmPatchBuffer<-glmmadmb(Cheli.adults~scale(bufferarea)+offset(scale(patcharea))+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+zmBuffer<-glmmadmb(Cheli.adults~scale(bufferfararea)*scale(patcharea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+zmPatchBuffer<-glmmadmb(Cheli.adults~scale(patcharea)+scale(bufferfararea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
 zmPatch<-glmmadmb(Cheli.adults~scale(patcharea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
 zmNND<-glmmadmb(Cheli.adults~scale(nnd)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
-zmNNDBuffer<-glmmadmb(Cheli.adults~scale(nnd)*scale(bufferarea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+zmNNDBuffer<-glmmadmb(Cheli.adults~scale(nnd)*scale(bufferfararea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
 zmPropTrt<-glmmadmb(Cheli.adults~PropLost*TrtType+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
 
 AICtable <- AIC(zmPatch,zmPatchBuffer,zmNND,zmNNDBuffer ,zmPropTrt)
-AIC(zmPatch)
+summary(zmPropTrt)
+
+AICtable$deltaAIC<- AICtable$AIC- min(AICtable$AIC)
+
+plot(patcharea~bufferarea, data= comm.sub)
+
 summary(zmNNDBuffer)
-summary(zmNND)
-summary(zmPatchBuffer)
+
+zmNNDBuffer<-glmmadmb(Cheli.adults~scale(nnd)*scale(bufferarea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T, mcmc = TRUE, mcmc.opts = mcmcControl(mcmc=1000))
+
+boxplot(log(comm.sub$bufferarea)~comm.sub$year)  ####Box plots of bufferarea
+boxplot(log(comm.sub$patcharea)~comm.sub$year)
+
+library(ggplot2)
+
+ggplot(comm.sub, aes(x = year, y= log(bufferarea)))+
+  geom_boxplot( fill= "forestgreen") +
+  theme_minimal()+
+  theme(axis.title = element_text(size=20)) +
+  xlab("Year") +
+  ylab("log(Local Habitat Amount)")
+
+ggplot(comm.sub, aes(x = year, y= log(patcharea)))+
+  geom_boxplot( fill= "forestgreen") +
+  theme_minimal()+
+  theme(axis.title = element_text(size=20)) +
+  xlab("Year") +
+  ylab("log(Patch Area)")
+
+ggplot(comm.sub, aes(x = year, y= log(nnd)))+
+  geom_boxplot(fill= "forestgreen") +
+  theme_minimal()+
+  theme(axis.title = element_text(size=20)) +
+  xlab("Year") +
+  ylab("Nearest neighbor distance")
+
+mPatchBuffer<-glmmadmb(Cheli.adults~scale(patcharea)+scale(bufferarea)*year+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+mPatch<-glmmadmb(Cheli.adults~scale(patcharea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+mNND<-glmmadmb(Cheli.adults~scale(patcharea)+scale(nnd)*year+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+mNNDBuffer<-glmmadmb(Cheli.adults~scale(patcharea)+scale(nnd)*scale(bufferarea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+mPropTrt<-glmmadmb(Cheli.adults~scale(patcharea)+PropLost*TrtType+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+mPropTrt<-glmmadmb(Cheli.adults~scale(patcharea)+PropLost*TrtType*year+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+
+
+AICtable <- AIC(mPatch,mPatchBuffer,mNND,mNNDBuffer ,mPropTrt)
+
+summary(mNNDBuffer)
+
+mean(scale(comm.sub$patcharea))
+
+
+pred_nndbuffer = data.frame(bufferarea = seq(min(scale(comm.sub$bufferarea)), max(scale(comm.sub$bufferarea)), length.out = 200)) 
+pred_nndbuffer$nnd = median(comm.sub$nnd)
+pred_nndbuffer$patcharea = median(scale(comm.sub$patcharea))
+predict(mNNDBuffer, pred_nndbuffer, type = "response")
 
 
