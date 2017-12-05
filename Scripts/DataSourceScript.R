@@ -24,7 +24,7 @@ xy.2015=list()
 plotID.2015=list()
 patchID.2015=list()
 
-#2015
+#2015 distance matrix calculations
 for(i in 1:17){  
   plot.i<-subset(coordinates, plot==i & posttrt=="Y")
   #remove NA locations posttrt
@@ -47,7 +47,7 @@ for(i in 1:17){
   diag(distfaredge.matrix.2015[[i]])<-0 #doesn't include focal patch
 }
 
-#2014
+#2014 distance matrix calculations
 dist.matrix.2014=list()
 distfaredge.matrix.2014=list() #center to patch far edge distance matrix
 area.2014=list()
@@ -159,7 +159,8 @@ community$Survey.Date <- as.Date(community$Survey.Date, format = "%m/%d/%Y")
 community$month <- months(community$Survey.Date)
 community$month <-factor(community$month, levels= c("January","February","March","April", "May", "June", "July", "August","September", "October", "November", "December"))
 community$month<- as.numeric(community$month)
-#####################Calculation of subeseted plot to avoid edge effects
+
+#####################Calculation of subseseted plot to avoid edge effects
 ####Calculations
 
 meandist=12.5 #2014 monthly data, removing first check (transient from release)
@@ -186,7 +187,7 @@ for(i in 1:17){
                               plot.i$North > c_minmax$subYmin & plot.i$North < c_minmax$subYmax,1,0)
   
 }
-################
+################   Merges subsetted coordinate data with community date toi include only patchs > 12.5m from edge of plots
 coordinates$coordInc <- unlist(subcoordInd)
 
 subsetmerge<- coordinates[,c(2,3,16)]
@@ -210,15 +211,3 @@ write.csv(community2015,"ManData/community2015.csv")
 write.csv(community2015.nocont, "ManData/community2015.nocont.csv")
 
 #################################################################################
-
-community2015$Survey.Date <- as.Date(community2015$Survey.Date, format = "%m/%d/%Y")
-
-community2015$month<- as.numeric(as.factor(months(as.Date(community2015$Survey.Date, format = "%m/%d/%Y"))))
-
-community2015$month <- months(community2015$Survey.Date)
-
-#community2015$month1<- 
-community2015$month <-factor(community2015$month, levels= c("January","Feb","March","April", "May", "June", "July", "August","September", "October", "November", "December"))
-community2015$month<- as.numeric(community2015$month)
-
-
