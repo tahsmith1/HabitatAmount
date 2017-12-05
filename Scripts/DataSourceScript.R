@@ -201,13 +201,13 @@ communitySub <- subset(communityNew, coordinates$coordInc == 1)
 ####writes already calculated community and coordinate data frames#######
 
 
-write.csv(community,"ManData/community.csv")
-write.csv(communitySub, "ManData/communitySub.csv")
+#write.csv(community,"ManData/community.csv")
+#write.csv(communitySub, "ManData/communitySub.csv")
 
 community2015<-subset(community, SurveyNumber>5 & SurveyNumber<23)
 community2015.nocont<-subset(community2015, TrtType!="cont")
 
-write.csv(community2015,"ManData/community2015.csv")
-write.csv(community2015.nocont, "ManData/community2015.nocont.csv")
+#write.csv(community2015,"ManData/community2015.csv")
+#write.csv(community2015.nocont, "ManData/community2015.nocont.csv")
 
 #################################################################################
