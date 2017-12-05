@@ -64,6 +64,8 @@ zmNNDBuffer<-glmmadmb(Cheli.adults~scale(nnd)*scale(bufferarea)+(1|Plot), data=c
 boxplot(log(comm.sub$bufferarea)~comm.sub$year)  ####Box plots of bufferarea
 boxplot(log(comm.sub$patcharea)~comm.sub$year)
 
+#####Created boxplots in ggplot2
+
 library(ggplot2)
 
 ggplot(comm.sub, aes(x = year, y= log(bufferarea)))+
