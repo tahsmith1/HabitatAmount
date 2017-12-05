@@ -160,38 +160,9 @@ community$month <- months(community$Survey.Date)
 community$month <-factor(community$month, levels= c("January","February","March","April", "May", "June", "July", "August","September", "October", "November", "December"))
 community$month<- as.numeric(community$month)
 
-#####################Calculation of subseseted plot to avoid edge effects
+#####################Calculation of subseseted plot to avoid edge effects (see subsetcalcs.R)
 ####Calculations
-
-meandist=12.5 #2014 monthly data, removing first check (transient from release)
-alpha<-1/meandist
-
-pc_minmax <- read.csv("Data/plot_corners_minmax.csv")
-
-pc_minmax$subXmin <- pc_minmax$Xmin + meandist
-pc_minmax$subXmax <- pc_minmax$Xmax - meandist
-pc_minmax$subYmin <- pc_minmax$Ymin + meandist
-pc_minmax$subYmax <- pc_minmax$Ymax - meandist
-
-inmax <- subset(pc_minmax, Plot==1)
-
-coordinates$coordInc <- NA
-head(coordinates)
-
-subcoordInd = list()
-
-for(i in 1:17){  
-  plot.i<-subset(coordinates, plot==i)
-  c_minmax <- subset(pc_minmax, Plot==i)
-  subcoordInd[[i]]<- ifelse(plot.i$East > c_minmax$subXmin & plot.i$East < c_minmax$subXmax & 
-                              plot.i$North > c_minmax$subYmin & plot.i$North < c_minmax$subYmax,1,0)
-  
-}
-################   Merges subsetted coordinate data with community date toi include only patchs > 12.5m from edge of plots
-coordinates$coordInc <- unlist(subcoordInd)
-
-subsetmerge<- coordinates[,c(2,3,16)]
-names(subsetmerge)[1:2] <- c("Plot","Patch")
+subsetmerge <- read.csv("ManData/subsetmerge.csv")
 
 communityNew <-  merge(community,subsetmerge , by=c("Plot","Patch"), all = F)
 communitySub <- subset(communityNew, coordinates$coordInc == 1)
