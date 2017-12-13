@@ -4,12 +4,6 @@ coordinates <-read.csv("ManData/coordinates.csv")
 
 ######
 
-landscape2015.df<-data.frame(Plot=unlist(plotID.2015),Patch=unlist(patchID.2015),
-                             patcharea=unlist(area.2015))
-landscape2014.df<-data.frame(Plot=unlist(plotID.2014),Patch=unlist(patchID.2014),
-                             patcharea=unlist(area.2014))
-
-
 #make lists for each plot for distance/area
 dist.matrix.2015=list()#from patch centers
 distedge.matrix.2015=list()#from patch edges (approximate)
@@ -68,6 +62,14 @@ for(i in 2:17){
   distfaredge.matrix.2014[[i]] <- sweep(dist.matrix.2014[[i]], 2, radius.i, "+")
   diag(distfaredge.matrix.2014[[i]])<-0 #doesn't include focal patch
 }
+#####
+
+
+landscape2015.df<-data.frame(Plot=unlist(plotID.2015),Patch=unlist(patchID.2015),
+                             patcharea=unlist(area.2015))
+landscape2014.df<-data.frame(Plot=unlist(plotID.2014),Patch=unlist(patchID.2014),
+                             patcharea=unlist(area.2014))
+
 
 ##############################
 meandist=12.5
@@ -139,11 +141,72 @@ communityt<-merge(community, lland, by=c("Plot","Patch","year"), all=F)
 
 community <- communityt
 
-##### Add month column
-community$Survey.Date <- as.Date(community$Survey.Date, format = "%m/%d/%Y")
-community$month <- months(community$Survey.Date)
-community$month <-factor(community$month, levels= c("January","February","March","April", "May", "June", "July", "August","September", "October", "November", "December"))
-community$month<- as.numeric(community$month)
+
+############ subset by Aug-Nov
+
+comm2014<- subset(community, subset = community$year == 2014)
+comm2015<- subset(community, subset = community$year == 2015)
+
+comm2014an <- subset(comm2014, comm2014$month >7)
+comm2015an <- subset(comm2015, comm2015$month >7)
 
 
-       
+####Takes the 1st, 3rd, and 5th observation in 2015 to balance it with the 3 monthly obs in 2014
+comhold = list()
+chold = list()
+library(data.table)
+
+for(i in 2:17){  
+  if (i==12) next
+  comm.i <- subset(comm2015an, comm2015an$Plot == i)
+  chold = list()
+  for(ii in  1:length(unique(comm.i$Patch))){
+    pcomm.ii <- subset(comm.i, comm.i$Patch ==  unique(comm.i$Patch)[ii])
+    pcomm.ii <- pcomm.ii[order(pcomm.ii$SurveyNumber),]
+    chold[[ii]]<- pcomm.ii[c(1,3,5),]
+  }
+  comhold[[i]] <- rbindlist(chold)
+  
+}
+
+comm2015an3<- rbindlist(comhold)
+
+################# Removing patches in 2014 that don't remain in 2015 after treatment
+#communityYear<- rbind(comm2014an,comm2015an3)
+
+leftpatches <- comm2015an3[,c("Patch","Plot")]
+leftpatches<- unique(leftpatches)
+comm2014ms <- merge(comm2014an, leftpatches, by = c("Plot", "Patch"), all= F)
+
+leftpatches1<- comm2014ms[,c("Patch","Plot")]
+leftpatches1 <-unique(leftpatches1)
+comm2015ms<- merge(comm2015an3, leftpatches1, by = c("Plot", "Patch"), all= F)
+
+###Make combined commmunity data frame from 2014 and 2015 data
+
+communityYear<- rbind(comm2014ms,comm2015ms)
+
+########Plot, patch and year made into factors for analysis
+
+communityYear$Plot<- as.factor(communityYear$Plot)
+communityYear$Patch<- as.factor(communityYear$Patch)
+communityYear$year<- as.factor(communityYear$year)
+
+
+###Creates data frame without plots in which no habitat was removed (3 plots not used)
+comm.nocont<- subset(communityYear, TrtType != "cont")
+
+
+###############################################  Analysis
+
+col_buffnames <- names(comm.nocont)[40:88]
+
+zipmPB = list()
+
+for(ii in 40:88){
+  zipmPB[[ii-39]] <-glmmadmb(Cheli.adults~scale(patcharea.x)+scale(comm.nocont[,ii])+(1|Plot), data=comm.nocont, family="Poisson", zeroInflation=T)
+}
+
+names(zipmPB)<- col_buffnames
+
+
