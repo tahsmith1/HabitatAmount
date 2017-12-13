@@ -65,9 +65,13 @@ leftpatches <- comm2015an3[,c("Patch","Plot")]
 leftpatches<- unique(leftpatches)
 comm2014ms <- merge(comm2014an, leftpatches, by = c("Plot", "Patch"), all= F)
 
+leftpatches1<- comm2014ms[,c("Patch","Plot")]
+leftpatches1 <-unique(leftpatches1)
+comm2015ms<- merge(comm2015an3, leftpatches1, by = c("Plot", "Patch"), all= F)
+
 ###Make combined commmunity data frame from 2014 and 2015 data
 
-communityYear<- rbind(comm2014ms,comm2015an3)
+communityYear<- rbind(comm2014ms,comm2015ms)
 
 ########Plot, patch and year made into factors for analysis
 
