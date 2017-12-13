@@ -1,2 +1,2 @@
 # HabitatAmount
-Landscape Ecology Project 2017
+Habitat Amount Hypothesis Project 2017
