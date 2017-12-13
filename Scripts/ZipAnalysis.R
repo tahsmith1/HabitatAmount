@@ -91,18 +91,22 @@ ggplot(comm.sub, aes(x = year, y= log(nnd)))+
 
 ####Adding year interaction into the analysis (picks up differences esp for trtmenttype)
 
-mPatchBuffer<-glmmadmb(Cheli.adults~scale(patcharea)+scale(bufferarea)*year+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+mPatchBuffer<-glmmadmb(Cheli.adults~scale(patcharea)+scale(bufferarea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
 mPatch<-glmmadmb(Cheli.adults~scale(patcharea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
-mNND<-glmmadmb(Cheli.adults~scale(patcharea)+scale(nnd)*year+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+mNND<-glmmadmb(Cheli.adults~scale(patcharea)+scale(nnd)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
 mNNDBuffer<-glmmadmb(Cheli.adults~scale(patcharea)+scale(nnd)*scale(bufferarea)+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
-mPropTrt<-glmmadmb(Cheli.adults~scale(patcharea)+PropLost*TrtType+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+#mPropTrt<-glmmadmb(Cheli.adults~scale(patcharea)+PropLost*TrtType+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
 mPropTrt<-glmmadmb(Cheli.adults~scale(patcharea)+PropLost*TrtType*year+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+mPropYear<-glmmadmb(Cheli.adults~scale(patcharea)+PropLost*year+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+mTrtYear<-glmmadmb(Cheli.adults~scale(patcharea)+TrtType*year+(1|Plot), data=comm.sub, family="Poisson", zeroInflation=T)
+AICtable <- AIC(mPatch,mPatchBuffer,mNND,mNNDBuffer ,mPropTrt, mPropYear, mTrtYear)
+AICtable
+########
 
 
-AICtable <- AIC(mPatch,mPatchBuffer,mNND,mNNDBuffer ,mPropTrt)
 
-summary(mNNDBuffer)
-summary(mPropTrt)
+
+
 
 
 
