@@ -2,6 +2,15 @@
 community <- read.csv("ManData/community.csv")
 coordinates <-read.csv("ManData/coordinates.csv")
 
+#####
+
+library(reshape2)
+library(plyr)
+library(ggplot2)
+library(survival) 
+library(MuMIn)
+library(lme4)
+library(glmmADMB)#zero-inflated mixed model
 ######
 
 #make lists for each plot for distance/area
@@ -72,7 +81,6 @@ landscape2014.df<-data.frame(Plot=unlist(plotID.2014),Patch=unlist(patchID.2014)
 
 
 ##############################
-meandist=12.5
 
 bufferfar_calc15 <- function(meandist) {
   ###Calculate the buffer area based on the far edges of patches (most conservative way to calculate)
@@ -198,15 +206,52 @@ comm.nocont<- subset(communityYear, TrtType != "cont")
 
 
 ###############################################  Analysis
+get_glmmadab_buffer <- function(bufferv, dat = comm.nocont){
+  dat$bv <- bufferv
+  zipmPBa <-glmmadmb(Cheli.adults~scale(patcharea.x)+scale(bv)+(1|Plot), data= dat, family="Poisson", zeroInflation=T)
+  return(zipmPBa)
+}
+
+######
 
 col_buffnames <- names(comm.nocont)[40:88]
 
-zipmPB = list()
 
-for(ii in 40:88){
-  zipmPB[[ii-39]] <-glmmadmb(Cheli.adults~scale(patcharea.x)+scale(comm.nocont[,ii])+(1|Plot), data=comm.nocont, family="Poisson", zeroInflation=T)
-}
+zlist40_49<- comm.nocont[,40:49]
+zlist40_49 <- as.list(zlist)
+zipmPB40_49 = list()
+zipmPB40_49<- lapply(zlist, FUN=get_glmmadab_buffer)
+names(zipmPB40_49)<- names(zlist)
+saveRDS(zipmPB40_49, file = "ManData/zipmPB40_49.rds")
 
-names(zipmPB)<- col_buffnames
+
+zlist50_59<- comm.nocont[,50:59]
+zlist50_59 <- as.list(zlist50_59)
+zipmPB50_59 = list()
+zipmPB50_59<- lapply(zlist50_59, FUN=get_glmmadab_buffer)
+names(zipmPB50_59)<- names(zlist50_59)
+saveRDS(zipmPB50_59, file = "ManData/zipmPB50_59.rds")
+
+zlist60_69<- comm.nocont[,60:69]
+zlist60_69 <- as.list(zlist60_69)
+zipmPB60_69 = list()
+zipmPB60_69<- lapply(zlist60_69, FUN=get_glmmadab_buffer)
+names(zipmPB60_69)<- names(zlist60_69)
+saveRDS(zipmPB60_69, file = "ManData/zipmPB60_69.rds")
+
+
+zlist70_79<- comm.nocont[,70:79]
+zlist70_79 <- as.list(zlist70_79)
+zipmPB70_79 = list()
+zipmPB70_79<- lapply(zlist70_79, FUN=get_glmmadab_buffer)
+names(zipmPB70_79)<- names(zlist70_79)
+saveRDS(zipmPB70_79, file = "ManData/zipmPB70_79.rds")
+
+zlist80_88<- comm.nocont[,80:88]
+zlist80_88 <- as.list(zlist80_88)
+zipmPB80_88 = list()
+zipmPB80_88<- lapply(zlist80_88, FUN=get_glmmadab_buffer)
+names(zipmPB80_88)<- names(zlist80_88)
+saveRDS(zipmPB80_88, file = "ManData/zipmPB80_88.rds")
 
 
